@@ -1,26 +1,6 @@
 import math
 
 
-
-class Ghost:
-    def __init__(self, tree, start ):
-        self.tree = tree
-        self.start  = start
-    def step(self, instruct):
-        if (instruct == "L"):
-            self.start = self.tree[self.start][0]
-        else:
-            self.start = self.tree[self.start][1]
-    def is_z(self):
-        return self.start[-1] == "Z"
-
-def check_all_ghost(arr):
-    for each in arr:
-        if (not each.is_z()):
-            return True
-    return False
-
-
 def build_dict(s:str)->dict:
     output = {}
     for each in s[2:]:
@@ -29,6 +9,45 @@ def build_dict(s:str)->dict:
         value[1] = value[1].strip()
         output[key] = value
     return output
+
+def get_all_information(temp, tree, instructions):
+    now = 0 
+    total = 0
+    count_loop = 0
+    count_to_z = 0
+    switch_loop = False
+    switch_z   = True
+    while True:
+        if ( now == len(instructions)):
+            now = 0
+        this_instruction = instructions[now]
+        if (this_instruction == "L"):
+            temp = tree[temp][0]
+        else:
+            temp = tree[temp][1]
+
+        # if (temp[-1] == "Z" ):
+        #     print("Z found", total, now)
+
+        if (temp[-1] == "Z" and switch_z):
+            print("Z found", count_to_z)
+            switch_z = False
+        
+        if (now == len(instructions)-1 and temp[-1] == "Z"):
+            if (switch_loop):
+                break
+            else:
+                switch_loop = True
+
+        if (switch_z):
+            count_to_z += 1
+
+        if (switch_loop):
+            count_loop += 1
+        now += 1
+        total += 1
+
+    return count_to_z, count_loop, total
 
 def readfile(filename:str):
     with open(filename, 'r') as f:
@@ -39,27 +58,20 @@ def main():
     filename = "test2.txt"
     text_arr = readfile(filename)
     instructions = text_arr[0]
+    print(len(instructions))
     tree = build_dict(text_arr)
-    ghosts = []
+    all_answer = []
     for each in tree:
         if (each[-1] == "A"):
-            ghosts.append(
-                    Ghost(tree, each)
-                    )
-    print(len(ghosts))
-    ## start step
-    count = 0
-    now   = 0 
-    while check_all_ghost(ghosts):
-        print(count, now)
-        if ( now == len(instructions)):
-            now = 0
+            print(each)
+            args = get_all_information(each, tree ,instructions)                   
+            print(args)
+            all_answer.append(args[1])
+    print(all_answer)
+    print(
+            math.lcm(*all_answer)
+            )
 
-        for each in ghosts:
-            each.step(instructions[now])
-        now += 1
-        count += 1
-    print(count)
 
 if __name__ == '__main__':
     main()

@@ -17,8 +17,8 @@ def main():
     text_arr = readfile(filename)
     cards = list( [ each.split(" ")[0] for each in text_arr ])
     bids  = list( [ int(each.split(" ")[1]) for each in text_arr ])
-    cb_arr = list( zip(cards, bids) )
-    cb_arr.sort(key=lambda x : Card(x[0]))
+    cb_arr :list = list( zip(cards, bids) )
+    cb_arr.sort(key=lambda x : Card(x[0])) 
     print(f"{cb_arr}")
     print( calculate_answer(cb_arr) )
 

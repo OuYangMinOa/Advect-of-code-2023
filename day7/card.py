@@ -19,9 +19,9 @@ class Strength:
         return output
 
     @classmethod
-    def getEnum(self, s:str):
+    def getEnum(cls, s:str):
         # if s all the same
-        same_dict  = self.count_same(s) 
+        same_dict  = cls.count_same(s) 
         this_value = sorted(same_dict.values())
 
         if ( len(same_dict) == 1 and this_value[0] == 5):
@@ -75,7 +75,7 @@ class Card:
         for k,u in zip(self.card,other.card):
             if ( self.card_to_num(k) != self.card_to_num(u)):
                 return  self.card_to_num(k) > self.card_to_num(u)
-
+        return False
 
 
 
